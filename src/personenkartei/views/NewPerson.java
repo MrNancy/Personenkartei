@@ -21,7 +21,7 @@ public class NewPerson extends DefaultView implements View {
     private JPlaceholderTextFiled zipTextField;
     private JPlaceholderTextFiled cityTextField;
     private JPlaceholderTextFiled emailTextField;
-    private DefaultTableModel tableModel;
+    private final DefaultTableModel tableModel;
     private final boolean sampleUser;
 
     public NewPerson(Dimension screenDimension, CsvDao dao, DefaultTableModel tableModel, boolean sampleUser) {
@@ -152,7 +152,6 @@ public class NewPerson extends DefaultView implements View {
         });
         jPanel.add(button);
 
-        Main.debug(sampleUser);
         if (sampleUser) {
             firstnameTextField.setText("Max");
             lastnameTextField.setText("Mustermann");

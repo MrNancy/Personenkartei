@@ -1,19 +1,24 @@
 package personenkartei;
 
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class CsvDao {
     private final File file;
     private PersonList personList;
+    CSVFormat format = CSVFormat.EXCEL.withHeader().withDelimiter(';').withQuoteMode(QuoteMode.ALL).withQuote('"');
 
     public CsvDao(File file) {
         this.file = file;
+    }
+
+    public String getFilePath() {
+        return file.getAbsolutePath();
     }
 
     public boolean validateFile() {
@@ -36,15 +41,59 @@ public class CsvDao {
         return true;
     }
 
-    public boolean save() {
-        return false;
+    private void backup(Path backupFile) throws IOException, InterruptedException {
+        if (Files.exists(backupFile)) {
+            Main.debug("Backup file found! Deleting it.");
+            Files.delete(backupFile);
+        }
+        Files.copy(Path.of(file.getAbsolutePath()), backupFile);
+
+        Process p = Runtime.getRuntime().exec("attrib +H " + backupFile);
+        p.waitFor();
+
+        Main.debug("Backup has been created");
     }
 
-    public boolean update(Object object, Object newObject) {
-        return false;
+    private void purge() throws FileNotFoundException {
+        PrintWriter cleaner = new PrintWriter(file);
+        cleaner.print("");
+        cleaner.close();
+        Main.debug("Original file has been purged");
     }
 
-    public void delete(Person person) {
+    private void purgeBackup(Path backupFile) throws IOException {
+        if (Files.exists(backupFile) && file.length() > 0) {
+            Files.delete(backupFile);
+            Main.debug("Backup file has been purged");
+            return;
+        }
+        Main.debug("Backup file has not been purged");
+    }
+
+    public boolean save(List<Object[]> stringCollection) {
+        try {
+            Path backupFile = Path.of(file.getAbsolutePath() + ".jbackup");
+
+            backup(backupFile);
+            purge();
+
+            BufferedWriter writer = Files.newBufferedWriter(Path.of(file.getAbsolutePath()));
+            CSVPrinter csvPrinter = new CSVPrinter(writer, format);
+
+            for (Object[] entry : stringCollection) {
+                csvPrinter.printRecord(entry);
+            }
+
+            csvPrinter.flush();
+            csvPrinter.close();
+            writer.close();
+
+            purgeBackup(backupFile);
+
+            return true;
+        } catch (IOException | InterruptedException ioException) {
+            return false;
+        }
     }
 
     public PersonList readAllToList() throws IOException {
@@ -52,7 +101,7 @@ public class CsvDao {
 
         InputStream inputStream = new FileInputStream(file.getAbsolutePath());
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-        CSVParser parser = CSVFormat.EXCEL.withDelimiter(';').parse(inputStreamReader);
+        CSVParser parser = format.parse(inputStreamReader);
         List<CSVRecord> records = parser.getRecords();
 
         for (CSVRecord record : records) {
