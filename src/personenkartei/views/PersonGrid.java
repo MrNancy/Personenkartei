@@ -5,7 +5,9 @@ import personenkartei.interfaces.View;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,9 +18,10 @@ import java.util.List;
 public class PersonGrid extends DefaultView implements View {
     private final CsvDao dao;
     private JScrollPane scrollPane;
-    private JTable jTable;
     private DefaultTableModel tableModel;
     private final Dimension screenDimension;
+    private JMenu removePersonButton;
+    private JTable jTable;
 
     public PersonGrid(Dimension screenDimension, JFrame previousFrame, CsvDao dao) {
         super(screenDimension, previousFrame);
@@ -35,7 +38,32 @@ public class PersonGrid extends DefaultView implements View {
         for (Person person : personList.getList()) {
             tableModel.addRow(new Object[]{person.getId(), person.getFirstName(), person.getLastName(), person.getBirthday(), person.getStreet(), person.getHouseNumber(), person.getZip(), person.getCity(), person.getEmail()});
         }
-        jTable = new JTable(tableModel);
+        jTable = new JTable(tableModel) {
+            public boolean isCellEditable(int row, int column) {
+                return column != 0;
+            }
+        };
+        jTable.setColumnSelectionAllowed(false);
+        jTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        jTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseClicked(e);
+                removePersonButton.setVisible(!jTable.getSelectionModel().isSelectionEmpty());
+            }
+        });
+
+        final Color noEditColor = Color.decode("#E4E4E4");
+
+        DefaultTableCellRenderer idRender = new DefaultTableCellRenderer();
+        idRender.setBackground(noEditColor);
+
+        JTableHeader header = jTable.getTableHeader();
+        header.setBackground(noEditColor);
+
+        jTable.getColumnModel().getColumn(0).setCellRenderer(idRender);
+        jTable.getColumnModel().getColumn(0).setPreferredWidth(1);
+
         Rectangle cellRect = jTable.getCellRect(0, 0, true);
         jTable.scrollRectToVisible(cellRect);
         scrollPane = new JScrollPane(jTable);
@@ -52,7 +80,7 @@ public class PersonGrid extends DefaultView implements View {
     public void setContent() {
         frame.setTitle("Personenkartei | Liste");
 
-        var newPersonButton = new JMenu("Person hinzufügen");
+        var newPersonButton = new JMenu("Hinzufügen");
         newPersonButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         newPersonButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -62,7 +90,7 @@ public class PersonGrid extends DefaultView implements View {
             }
         });
 
-        var newSamplePersonButton = new JMenu("Sample Person hinzufügen");
+        var newSamplePersonButton = new JMenu("Musterperson Hinzufügen");
         newSamplePersonButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         newSamplePersonButton.addMouseListener(new MouseAdapter() {
             @Override
@@ -72,13 +100,47 @@ public class PersonGrid extends DefaultView implements View {
             }
         });
 
+        removePersonButton = new JMenu("Entfernen");
+        removePersonButton.setVisible(false);
+        removePersonButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        removePersonButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                removePerson();
+            }
+        });
+
+        var closeButton = new JMenu("Zurück");
+        closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        closeButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                frame.hide();
+                new StartUp(screenDimension).show();
+            }
+        });
+
+
         JMenuBar bar = new JMenuBar();
-        bar.add(newPersonButton);
-        bar.add(newSamplePersonButton);
+        JMenu personJMenu = new JMenu("Person");
+        bar.add(personJMenu);
+        personJMenu.add(newPersonButton);
+        personJMenu.add(removePersonButton);
+        personJMenu.add(newSamplePersonButton);
+        bar.add(closeButton);
         frame.setJMenuBar(bar);
         bar.setVisible(true);
         bar.repaint();
         frame.add(scrollPane);
+    }
+
+    private void removePerson() {
+        if (jTable.getSelectedRow() != -1) {
+            tableModel.removeRow(jTable.getSelectedRow());
+            removePersonButton.setVisible(false);
+        }
     }
 
     private void addNewPerson(boolean sampleUser) {
