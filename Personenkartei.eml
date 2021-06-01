@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component LANGUAGE_LEVEL="JDK_15_PREVIEW" inherit-compiler-output="true" inheritJdk="true">
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$">
+		<excludeFolder url="file://$MODULE_DIR$/.idea"/>
+	</contentEntry>
+	<levels>
+		<level name="lib" value="project"/>
+	</levels>
+</component>
