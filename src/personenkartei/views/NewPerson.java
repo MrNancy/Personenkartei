@@ -13,6 +13,8 @@ import java.awt.event.MouseEvent;
 
 public class NewPerson extends DefaultView implements View {
     private final CsvDao dao;
+    private final DefaultTableModel tableModel;
+    private final boolean sampleUser;
     private JPlaceholderTextFiled firstnameTextField;
     private JPlaceholderTextFiled lastnameTextField;
     private JPlaceholderTextFiled birthdayTextField;
@@ -21,8 +23,6 @@ public class NewPerson extends DefaultView implements View {
     private JPlaceholderTextFiled zipTextField;
     private JPlaceholderTextFiled cityTextField;
     private JPlaceholderTextFiled emailTextField;
-    private final DefaultTableModel tableModel;
-    private final boolean sampleUser;
 
     public NewPerson(Dimension screenDimension, CsvDao dao, DefaultTableModel tableModel, boolean sampleUser) {
         super(screenDimension, false);

@@ -4,7 +4,6 @@ import org.apache.commons.validator.routines.DateValidator;
 import org.apache.commons.validator.routines.EmailValidator;
 
 import javax.swing.*;
-import javax.swing.text.Document;
 import java.awt.*;
 
 public class JPlaceholderTextFiled extends JTextField {
@@ -13,27 +12,8 @@ public class JPlaceholderTextFiled extends JTextField {
     public JPlaceholderTextFiled() {
     }
 
-    public JPlaceholderTextFiled(
-            final Document pDoc,
-            final String pText,
-            final int pColumns) {
-        super(pDoc, pText, pColumns);
-    }
-
-    public JPlaceholderTextFiled(final int pColumns) {
-        super(pColumns);
-    }
-
-    public JPlaceholderTextFiled(final String pText) {
-        super(pText);
-    }
-
-    public JPlaceholderTextFiled(final String pText, final int pColumns) {
-        super(pText, pColumns);
-    }
-
-    public String getPlaceholder() {
-        return placeholder;
+    public void setPlaceholder(final String s) {
+        placeholder = s;
     }
 
     @Override
@@ -52,7 +32,6 @@ public class JPlaceholderTextFiled extends JTextField {
         g.drawString(placeholder, getInsets().left, pG.getFontMetrics()
                 .getMaxAscent() + getInsets().top);
     }
-
 
     public boolean isValidEmail() {
         EmailValidator validator = EmailValidator.getInstance();
@@ -80,13 +59,5 @@ public class JPlaceholderTextFiled extends JTextField {
     public boolean isValidBirthday() {
         DateValidator validator = new DateValidator();
         return validator.isValid(this.getText(), "dd.mm.YYYY");
-    }
-
-    public void setPlaceholder(final String s) {
-        placeholder = s;
-    }
-
-    public boolean hasLessCharsThen(int amount) {
-        return !this.hasMoreCharsThen(amount);
     }
 }

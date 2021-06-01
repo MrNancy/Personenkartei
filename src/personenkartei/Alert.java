@@ -7,9 +7,9 @@ import java.awt.event.WindowEvent;
 
 public class Alert {
     JDialog alert = new JDialog();
-    private String title;
-    private String text;
-    private boolean exitOnClose;
+    private final String title;
+    private final String text;
+    private final boolean exitOnClose;
 
     public Alert(String title, String text, boolean exitOnClose) {
 

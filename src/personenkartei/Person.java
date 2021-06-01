@@ -11,17 +11,6 @@ public class Person {
     private String email;
     private long id;
 
-    public Person(String firstName, String lastName, String birthday, String street, String houseNumber, int zip, String city, String email) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthday = birthday;
-        this.street = street;
-        this.houseNumber = houseNumber;
-        this.zip = zip;
-        this.city = city;
-        this.email = email;
-    }
-
     public Person(long recordNumber) {
         this.id = Integer.parseInt(String.valueOf(recordNumber));
     }
@@ -110,13 +99,13 @@ public class Person {
         return clone;
     }
 
+    public long getId() {
+        return id;
+    }
+
     public Person setId(long id) {
         Person clone = this;
         clone.id = id;
         return clone;
-    }
-
-    public long getId() {
-        return id;
     }
 }

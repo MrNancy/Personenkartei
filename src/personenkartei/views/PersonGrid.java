@@ -17,9 +17,9 @@ import java.util.List;
 
 public class PersonGrid extends DefaultView implements View {
     private final CsvDao dao;
+    private final Dimension screenDimension;
     private JScrollPane scrollPane;
     private DefaultTableModel tableModel;
-    private final Dimension screenDimension;
     private JMenu removePersonButton;
     private JTable jTable;
 

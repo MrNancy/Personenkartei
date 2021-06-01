@@ -2,15 +2,7 @@ package personenkartei;
 
 import javax.swing.*;
 
-public class JFormTextField {
-    private final PersonField personFieldTitle;
-    private final JPanel panel;
-
-    public JFormTextField(PersonField personFieldTitle, JPanel panel) {
-        this.personFieldTitle = personFieldTitle;
-        this.panel = panel;
-    }
-
+public record JFormTextField(PersonField personFieldTitle, JPanel panel) {
     public JPlaceholderTextFiled build() {
         Main.debug("Textfield added: " + personFieldTitle.toString());
 

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class CsvDao {
     private final File file;
-    private PersonList personList;
     CSVFormat format = CSVFormat.EXCEL.withHeader().withDelimiter(';').withQuoteMode(QuoteMode.ALL).withQuote('"');
+    private PersonList personList;
 
     public CsvDao(File file) {
         this.file = file;
@@ -132,11 +132,11 @@ public class CsvDao {
         return file.createNewFile();
     }
 
-    public void setPersonList(PersonList personList) {
-        this.personList = personList;
-    }
-
     public PersonList getPersonList() {
         return personList;
+    }
+
+    public void setPersonList(PersonList personList) {
+        this.personList = personList;
     }
 }

@@ -9,12 +9,11 @@ import java.awt.event.WindowEvent;
 
 public class DefaultView {
     private final Dimension screenDimension;
-    JFrame frame = new JFrame();
-
     private final Dimension size;
     private final boolean centered;
     private final String title;
     private final boolean exitOnClose;
+    JFrame frame = new JFrame();
 
     public DefaultView(Dimension screenDimension, boolean exitOnClose) {
         this.screenDimension = screenDimension;

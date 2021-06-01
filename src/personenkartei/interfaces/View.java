@@ -1,5 +1,5 @@
 package personenkartei.interfaces;
 
 public interface View {
-    public void setContent();
+    void setContent();
 }
