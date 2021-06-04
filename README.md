@@ -27,13 +27,10 @@ The workspace contains two folders by default, where:
 
 - `src`: the folder to maintain sources
 - `lib`: the folder to maintain dependencies
-- `.run`: IntelliJ debug configuration
-- `build`: the folder holding the most recent .jar build and `manifest.mf` file
 
 ### Deployment
 
-1. run the application in your IDE so a `out` directory with your libraries and .class will be created
-2. run the command `jar cmf build/manifest.mf build/Personenkartei.jar out/production/Personenkartei/personenkartei/Main.class src/personenkartei/Main.java` in your project terminal
+1. run the artifact builder in intellij
 
 ## Dependencies
 
