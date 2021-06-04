@@ -12,14 +12,6 @@ public final class JFormTextField {
         this.panel = panel;
     }
 
-    public PersonField personFieldTitle() {
-        return personFieldTitle;
-    }
-
-    public JPanel panel() {
-        return panel;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;

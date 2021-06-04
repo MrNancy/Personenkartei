@@ -32,10 +32,10 @@ public class PersonGrid extends DefaultView implements View {
         setContent();
     }
 
-    private void putData(PersonList personList) {
+    private void putData(List<Person> personList) {
         Object[] columns = {PersonField.ID, PersonField.FIRSTNAME, PersonField.LASTNAME, PersonField.BIRTHDAY, PersonField.STREET, PersonField.HOUSENUMBER, PersonField.ZIP, PersonField.CITY, PersonField.EMAIL};
         tableModel = new DefaultTableModel(columns, 0);
-        for (Person person : personList.getList()) {
+        for (Person person : personList) {
             tableModel.addRow(new Object[]{person.getId(), person.getFirstName(), person.getLastName(), person.getBirthday(), person.getStreet(), person.getHouseNumber(), person.getZip(), person.getCity(), person.getEmail()});
         }
         jTable = new JTable(tableModel) {

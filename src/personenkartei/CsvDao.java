@@ -6,12 +6,13 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 public class CsvDao {
     private final File file;
     CSVFormat format = CSVFormat.EXCEL.withHeader().withDelimiter(';').withQuoteMode(QuoteMode.ALL).withQuote('"');
-    private PersonList personList;
+    private List<Person> personList;
 
     public CsvDao(File file) {
         this.file = file;
@@ -96,8 +97,8 @@ public class CsvDao {
         }
     }
 
-    public PersonList readAllToList() throws IOException {
-        PersonList personList = new PersonList();
+    public List<Person> readAllToList() throws IOException {
+        List<Person> personList = new ArrayList<>();
 
         InputStream inputStream = new FileInputStream(file.getAbsolutePath());
         InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
@@ -116,7 +117,7 @@ public class CsvDao {
                     .setCity(record.get(6))
                     .setEmail(record.get(7));
 
-            personList.addEntry(person);
+            personList.add(person);
         }
         inputStreamReader.close();
         inputStream.close();
@@ -125,18 +126,18 @@ public class CsvDao {
     }
 
     public void addPerson(Person person) {
-        personList.addEntry(person);
+        personList.add(person);
     }
 
     public boolean createFile() throws IOException {
         return file.createNewFile();
     }
 
-    public PersonList getPersonList() {
+    public List<Person> getPersonList() {
         return personList;
     }
 
-    public void setPersonList(PersonList personList) {
+    public void setPersonList(List<Person> personList) {
         this.personList = personList;
     }
 }
