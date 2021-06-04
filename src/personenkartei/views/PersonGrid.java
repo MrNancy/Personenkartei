@@ -100,6 +100,17 @@ public class PersonGrid extends DefaultView implements View {
             }
         });
 
+        var saveButton = new JMenu("Save");
+        saveButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        saveButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                makeSave();
+                new Alert("Saved", "All changes have been saved", false).show();
+            }
+        });
+
         removePersonButton = new JMenu("Entfernen");
         removePersonButton.setVisible(false);
         removePersonButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -129,6 +140,7 @@ public class PersonGrid extends DefaultView implements View {
         personJMenu.add(newPersonButton);
         personJMenu.add(removePersonButton);
         personJMenu.add(newSamplePersonButton);
+        bar.add(saveButton);
         bar.add(closeButton);
         frame.setJMenuBar(bar);
         bar.setVisible(true);
